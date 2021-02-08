@@ -7,7 +7,9 @@ import java.util.Date;
 public class Calendario {
 	private Integer mes;
 	private Integer ano;
-	
+	private Date today = new Date();
+	private Calendar cal = Calendar.getInstance();
+
 	public Calendario(Integer ano, Integer mes) {
 		this.ano = ano;
 		this.mes = mes;
@@ -20,6 +22,10 @@ public class Calendario {
 	public Integer getAno() {
 		return ano;
 	}
+	
+	public Date getToday() {
+		return today;
+	}
 
 	//matriz 
 	public Date[][] allDays() {
@@ -31,7 +37,6 @@ public class Calendario {
 				
 				corpo[i][j] = dia;
 				
-				Calendar cal = Calendar.getInstance();
 				cal.setTime(dia);
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 				dia = cal.getTime();
@@ -41,6 +46,7 @@ public class Calendario {
 		return corpo;
 	}
 	//busca na matriz
+	@SuppressWarnings("deprecation")
 	public int buscaLinhaMatriz(Date[][] corpo) {
 		int linhaI = 0;
 		int subAno = ano - 1900;
@@ -55,6 +61,5 @@ public class Calendario {
 			}
 		}
 		return linhaI;
-	}
-	
+	}	
 }

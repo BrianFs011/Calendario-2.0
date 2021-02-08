@@ -3,8 +3,6 @@ package application;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import entities.Calendario;
-
 public class UI {
 	//colors
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -25,19 +23,49 @@ public class UI {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-	//Class
-	private static Calendario cal;
 	//SDF
-	private static SimpleDateFormat day = new SimpleDateFormat("dd");
-	private static SimpleDateFormat month = new SimpleDateFormat("MMM");
+	private static final SimpleDateFormat day = new SimpleDateFormat("dd");
+	private static final SimpleDateFormat month = new SimpleDateFormat("MMM");
 	//ClearScreen
 	public static void clearScreen() { 
 		System.out.println();
 		System.out.print("\033[H\033[2J"); 
 		System.out.flush();
 	}
+	//PrintToday
+	@SuppressWarnings("deprecation")
+	public static void printScreen(Date[][] corpo, int linhaI, int todayMonth, int todayYear, Date today) {
+		//Boas vindas
+		System.out.println("Calendario (1970-2075)");
+		System.out.println();
+		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+todayYear+"---------");
+		System.out.print  ("dom seg ter qua qui sex sab");
+		
+		for(int i=linhaI; i<=linhaI+5; i++) {
+			System.out.println();
+			for (int j=0; j<7; j++) {
+				
+				//imprimi
+				if(corpo[i][j].getMonth() + 1== todayMonth) {
+					if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
+						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
+					}
+					else{
+						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
+					}
+				}
+				else {
+					System.out.print("    ");
+				}
+			}
+		}
+		System.out.println();
+	}
 	//PrintScrean
-	public static void printScreen(Date[][] corpo, int linhaI, int mes, int ano) {
+	@SuppressWarnings("deprecation")
+	public static void printScreen(Date[][] corpo, int linhaI, int mes, int ano, Date today, String sobrecarga) {
+		//Boas vindas
+		System.out.println("Calendario (1970-2075)");
 		System.out.println();
 		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+ano+"---------");
 		System.out.print  ("dom seg ter qua qui sex sab");
@@ -48,12 +76,18 @@ public class UI {
 				
 				//imprimi
 				if(corpo[i][j].getMonth() + 1== mes) {
-					System.out.print(" "+ day.format(corpo[i][j])+" ");														
+					if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
+						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
+					}
+					else{
+						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
+					}
 				}
 				else {
 					System.out.print("    ");
 				}
 			}
 		}
+		System.out.println();
 	}
 }
