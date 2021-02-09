@@ -1,5 +1,8 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -89,5 +92,21 @@ public class UI {
 			}
 		}
 		System.out.println();
+	}
+	
+	public static void printAgenda(int day, int month, int year, String save) {
+		String convert ="\\"+String.valueOf(day)+ String.valueOf(month)+ String.valueOf(year);
+		String path = save + convert + "\\note.txt";
+		try(BufferedReader br = new BufferedReader(new FileReader(path))){
+			String line = br.readLine();
+			while (line != null) {
+ 				System.out.println(ANSI_RED+line+" "+ANSI_RESET);
+				line = br.readLine();
+			}
+		}
+		catch(IOException e) {
+			System.out.println("!Fogo no parquinho leitura Agenda!");
+			e.printStackTrace();
+		}
 	}
 }

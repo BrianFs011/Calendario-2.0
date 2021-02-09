@@ -1,8 +1,10 @@
 package application;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -29,7 +31,7 @@ public class Program {
 		
 		Calendario calT = new Calendario(todayYear, todayMonth);
 		UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());	
-		//agenda
+		//add agenda?
 		System.out.print("New Agenda? (y/n) ");
 		char responseAgenda = sc.next().charAt(0);
 		while (responseAgenda != 'y' && responseAgenda != 'n') {
@@ -44,15 +46,43 @@ public class Program {
 				System.out.print("Digite um dia: ");
 				day = sc.nextInt();
 			}
-			new Agenda(day, todayMonth, todayYear);
+			agenda.add(new Agenda(day, todayMonth, todayYear));
+			//add nova nota?
+			boolean renponseDay = true;
+			while(renponseDay == true) {
+				
+				sc.nextLine();
+				System.out.print("Digite um note: ");
+				String note  = sc.nextLine();
+				System.out.print("Digite um valor: ");
+				double value = sc.nextDouble(); 
+				
+				//escrita		
+				Agenda agd = new Agenda(day, todayMonth, todayYear);
+				try(BufferedWriter bw = new BufferedWriter(new FileWriter(agd.path(), true))){
+					for(Agenda agda : agenda) {
+						bw.write(note+" R$-"+String.format("%.2f", value));
+						bw.newLine();
+					}
+					System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
+				}
+				catch(IOException e) {
+					System.out.println("!Fogo no parquinho escrita Agenda!");
+					e.printStackTrace();
+				}
 			
-			sc.nextLine();
-			System.out.print("Digite uma anotacao: ");
-			String note  = sc.nextLine();
-			System.out.print("Digite um valor: ");
-			double value = sc.nextDouble(); 
-			
-			agenda.add(new Agenda(day, todayMonth, todayYear, note, value));
+				UI.printAgenda(day, todayMonth, todayYear, agd.save());
+				
+				System.out.print("Add new note? (y/n) ");
+				char rd = sc.next().charAt(0); 
+				while(rd != 'n' && rd != 'y') {
+					System.out.print("Digite: (y/n) ");
+					rd = sc.next().charAt(0); 
+				}
+				if(rd == 'n') {
+					renponseDay = false;				
+				}
+			}
 		}
 		
 		if(responseAgenda == 'n') {
