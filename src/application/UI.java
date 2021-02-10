@@ -38,7 +38,7 @@ public class UI {
 	}
 	//PrintToday
 	@SuppressWarnings("deprecation")
-	public static void printScreen(Date[][] corpo, int linhaI, int todayMonth, int todayYear, Date today) {
+	public static void printScreen(Date[][] corpo, int linhaI, int todayYear, int todayMonth, Date today) {
 		//Boas vindas
 		System.out.println("Calendario (1970-2075)");
 		System.out.println();
@@ -67,24 +67,23 @@ public class UI {
 	}
 	//PrintToday&Day
 	@SuppressWarnings("deprecation")
-	public static void printScreen(Date[][] corpo, int linhaI, int todayMonth, int todayYear, Date today, int newDay) {
+	public static void printScreen(Date[][] corpo, int linhaI, int Year, int Month, int newDay, Date today) {
 		//Boas vindas
 		System.out.println("Calendario (1970-2075)");
 		System.out.println();
-		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+todayYear+"---------");
+		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+Year+"---------");
 		System.out.print  ("dom seg ter qua qui sex sab");
 		
 		for(int i=linhaI; i<=linhaI+5; i++) {
 			System.out.println();
 			for (int j=0; j<7; j++) {
-				
 				//imprimi
-				if(corpo[i][j].getMonth() + 1== todayMonth) {
-					if(corpo[i][j].getDate() == newDay && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
+				if(corpo[i][j].getMonth() + 1== Month) {
+					if(corpo[i][j].getDate() == newDay) {							
 						System.out.print(" "+ANSI_YELLOW_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
 					}
 					else if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
-						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
+						System.out.print(" "+ANSI_BLUE_BACKGROUND  + day.format(corpo[i][j])+ANSI_RESET+" ");
 					}
 					else{
 						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
@@ -97,37 +96,9 @@ public class UI {
 		}
 		System.out.println();
 	}
-	//PrintScrean
-	@SuppressWarnings("deprecation")
-	public static void printScreen(Date[][] corpo, int linhaI, int mes, int ano, Date today, String sobrecarga) {
-		//Boas vindas
-		System.out.println("Calendario (1970-2075)");
-		System.out.println();
-		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+ano+"---------");
-		System.out.print  ("dom seg ter qua qui sex sab");
-		
-		for(int i=linhaI; i<=linhaI+5; i++) {
-			System.out.println();
-			for (int j=0; j<7; j++) {
-				
-				//imprimi
-				if(corpo[i][j].getMonth() + 1== mes) {
-					if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
-						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
-					}
-					else{
-						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
-					}
-				}
-				else {
-					System.out.print("    ");
-				}
-			}
-		}
-		System.out.println();
-	}
+	
 	//imprimir agenda
-	public static void printAgenda(int day, int month, int year, String path) {
+	public static void printAgenda(int year, int month, int day, String path) {
 		try(BufferedReader br = new BufferedReader(new FileReader(path))){
 			String line = br.readLine();
 			while (line != null) {
@@ -140,17 +111,19 @@ public class UI {
 			e.printStackTrace();
 		}
 	}
+	
+	//imprime a soma
 	public static void printAgenda(String save) {
 		File path = new File(save);
 		File[] folders = path.listFiles(File::isDirectory);
-
+		
 		double price = 0;
 		for(File folder : folders) {	
 			try(BufferedReader br = new BufferedReader(new FileReader(folder+ "\\note.txt"))){
 				String line = br.readLine();
 				while (line != null) {
-					String[] vect = line.split("-");				
-					price += Double.parseDouble(vect[1]);						
+					String[] vect = line.split("-");
+					price += Double.parseDouble(vect[1]);												
 					line = br.readLine();
 				}
 			}
@@ -159,6 +132,6 @@ public class UI {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Gastos do mes  : "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);
+		System.out.println("Gastos do mes  : "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);			
 	}
 }

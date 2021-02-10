@@ -13,143 +13,126 @@ import entities.CalendarioException;
 
 public class Program {
 
+	@SuppressWarnings("static-access")
 	public static void main(String[]args) {
 		
 		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
-		Agenda agenda = new Agenda();
-		Date today = new Date();
+		Scanner sc        = new Scanner(System.in);
 		Calendar calendar = Calendar.getInstance();
-		SimpleDateFormat month = new SimpleDateFormat("MM");
-		SimpleDateFormat year  = new SimpleDateFormat("yyyy");
-				
-		int todayMonth   = Integer.parseInt(month.format(today));
-		int todayYear    = Integer.parseInt(year.format(today ));
-		int first        = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
-		int lastDayMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		Date todayDate    = new Date();
 		
-		Calendario calT = new Calendario(todayYear, todayMonth);
-		//clearScreen
-		UI.clearScreen();
-		//printCalendarioToday
-		UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());	
-		//valor total
-		UI.printAgenda(agenda.getSave());
+		SimpleDateFormat todayYear  = new SimpleDateFormat("yyyy");
+		SimpleDateFormat todayMonth = new SimpleDateFormat("MM")  ;
 		
-		//add agenda?
-		System.out.print("New Agenda? (y/n) ");
-		char responseAgenda = sc.next().charAt(0);
-		//clearScreen
-		UI.clearScreen();
-		//printCalendarioToday
-		UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());	
-		//valor total
-		UI.printAgenda(agenda.getSave());
-		while (responseAgenda != 'y' && responseAgenda != 'n') {
-			System.out.print("Digite: (y/n) ");
-			responseAgenda = sc.next().charAt(0);
-		}
-		//add nota
-		if(responseAgenda == 'y') {
-			//add nova nota?
-			boolean renponseDay = true;
-			while(renponseDay == true) {
-				System.out.print("Digite um dia  : ");
-				int day = sc.nextInt();
-				while(day < first || day > lastDayMonth) {
-					System.out.print("Digite um dia: ");
-					day = sc.nextInt();
-				}
-				//clearScreen
-				UI.clearScreen();
-				//printCalendarioToday&day
-				UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday(), day);
-				//valor total
-				UI.printAgenda(agenda.getSave());
-				//quebra de linha
-				sc.nextLine();
-				System.out.print("Digite um note : ");
-				String note  = sc.nextLine();
-				System.out.print("Digite um valor: ");
-				double value = sc.nextDouble(); 
-				Agenda agd = new Agenda(day, todayMonth, todayYear, note, value);
-				//escriver
-				agd.write();
-				//ler
-				UI.printAgenda(day, todayMonth, todayYear, agd.path());
-				
-				//repetir?
-				System.out.print("Add new note? (y/n) ");
-				char rd = sc.next().charAt(0); 
-				while(rd != 'n' && rd != 'y') {
-					System.out.print("Digite: (y/n) ");
-					rd = sc.next().charAt(0); 
-				}
-				//clearScreen
-				UI.clearScreen();
-				//printCalendarioToday&day
-				UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());
-				//valor total
-				UI.printAgenda(agenda.getSave());
-				if(rd == 'n') {
-					renponseDay = false;				
-				}
+		int year  = Integer.parseInt (todayYear.format(todayDate));
+		int month = Integer.parseInt(todayMonth.format(todayDate));
+								
+		boolean programa =  true; 
+		while(programa   == true) {
+			try {		
+			Calendario calendarioToday = new Calendario(year, month);
+			Agenda agendaSomaPrice = new Agenda(year, month, 1);
+			
+			//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
+			UI.clearScreen();
+			UI.printScreen(calendarioToday.allDays(), calendarioToday.buscaLinhaMatriz(calendarioToday.allDays()), year, month, todayDate);
+			UI.printAgenda(agendaSomaPrice.getSave());
+			// }
+			
+			System.out.print("New Agenda? (y/n) ");
+			char responseAgenda = sc.next().charAt(0);
+			while (responseAgenda != 'y' && responseAgenda != 'n') {
+				System.out.print("Digite: (y/n) ");
+				responseAgenda = sc.next().charAt(0);
 			}
-		}
-		
-		if(responseAgenda == 'n') {
-		}
-		
-		//calendario
-		boolean play = true;					
-
-		System.out.print("New Date? (y/n) ");
-		char responsePlay = sc.next().charAt(0);
-		
-		while (responsePlay != 'y' && responsePlay != 'n') {
-			System.out.print("Digite: (y/n) ");
-			responsePlay = sc.next().charAt(0);
-		}
-		
-		if(responsePlay == 'n') {
-			play = false;
-		}
-		
-		while(play == true) {
-			try {
+			
+			//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
+			UI.clearScreen();
+			UI.printScreen(calendarioToday.allDays(), calendarioToday.buscaLinhaMatriz(calendarioToday.allDays()), year, month, todayDate);
+			UI.printAgenda(agendaSomaPrice.getSave());
+			// }
+			
+			int firstDay = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
+			calendar.set(Calendar.MONTH, (month - 1));
+			calendar.set (Calendar.DAY_OF_MONTH, calendar.getActualMaximum(calendar.DAY_OF_MONTH));
+			int lastDay  = Integer.parseInt(new SimpleDateFormat("dd").format(calendar.getTime()));
+			
+			if(responseAgenda == 'y') {
+				
+				boolean newNote = true;
+				while(newNote == true) {
+					System.out.print("Digite um dia  : ");
+					int day = sc.nextInt();
+					while(day < firstDay || day > lastDay) {
+						System.out.print("Digite um dia  : ");
+						day = sc.nextInt();
+					}
+					
+					//Bloco de impreção (Limpa a tela, imprime calendario e day, imprime valor total){
+					UI.clearScreen();
+					UI.printScreen(calendarioToday.allDays(), calendarioToday.buscaLinhaMatriz(calendarioToday.allDays()), year, month, day, todayDate);
+					UI.printAgenda(agendaSomaPrice.getSave());
+					// }
+					
+					//quebra de linha
+					sc.nextLine();
+					System.out.print("Digite um note : ");
+					String note  = sc.nextLine();
+					System.out.print("Digite um valor: ");
+					double value = sc.nextDouble(); 
+					Agenda agenda = new Agenda(year, month, day, note, value);
+					
+					//escriver
+					agenda.write();
+					//ler
+					UI.printAgenda(year, month, day, agenda.path());
+					
+					//repetir?
+					System.out.print("Add new note? (y/n) ");
+					responseAgenda = sc.next().charAt(0); 
+					while(responseAgenda != 'n' && responseAgenda != 'y') {
+						System.out.print("Digite: (y/n) ");
+						responseAgenda = sc.next().charAt(0); 
+					}
+					if(responseAgenda == 'n') {
+						newNote = false;
+					}
+					
+					//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
+					UI.clearScreen();
+					UI.printScreen(calendarioToday.allDays(), calendarioToday.buscaLinhaMatriz(calendarioToday.allDays()), year,month, day, todayDate);
+					UI.printAgenda(agendaSomaPrice.getSave());
+					// }	
+				
+					}//renponseDay
+				}//responseAgenda
+			
+				System.out.print   ("New Date? (y/n) ")   ;
+				char newDate = sc.next().charAt(0);
+				
+				while(newDate != 'y' && newDate != 'n') {
+					System.out.println("Digite:   (y/n) ");
+					newDate  = sc.next().charAt(0);
+				}	
+				
+				//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
 				UI.clearScreen();
-				System.out.print("Digite um ano: ");
-				int ano = sc.nextInt();
-				//exception ano
-				while(ano < 1970 || ano > 2075) {
-					System.out.print("Por favor digite um ano entre (1970-2075): ");
-					ano = sc.nextInt();
+				UI.printScreen(calendarioToday.allDays(), calendarioToday.buscaLinhaMatriz(calendarioToday.allDays()), year, month, todayDate);
+				UI.printAgenda(agendaSomaPrice.getSave());
+				// }
+				
+				if (newDate == 'y') {
+					System.out.print("Digite um ano : ");
+					year  = sc.nextInt();
+					System.out.print("Digite um mes : ");
+					month = sc.nextInt();					
 				}
-				System.out.print("Digite um mes: ");
-				int mes = sc.nextInt();
-				//exception mes
-				while(mes < 1 || mes > 12) {
-					System.out.print("Por favor digite um mes entre (1-12): ");
-					mes = sc.nextInt();
+				else if(newDate == 'n'){
+					programa = false;
+					UI.clearScreen();
+					System.out.println("Exit");
 				}
-				
-				UI.clearScreen();
-				
-				Calendario cal = new Calendario(ano, mes);
-				UI.printScreen(cal.allDays(), cal.buscaLinhaMatriz(cal.allDays()), cal.getMes(), cal.getAno(), cal.getToday(), "sobreCarga");		
-				
-				System.out.print("New Date? (y/n) ");
-				responsePlay = sc.next().charAt(0);
-				
-				while (responsePlay != 'y' && responsePlay != 'n') {
-					System.out.print("Digite: (y/n) ");
-					responsePlay = sc.next().charAt(0);
-				}
-
-				if(responsePlay == 'n') {
-					play = false;
-				}
-				
+		
 			}
 			catch(CalendarioException e) {
 				System.out.println("!Fogo no parquinho!");
@@ -161,8 +144,8 @@ public class Program {
 			catch(IllegalStateException e) {
 				System.out.print("Digite numeros inteiros");
 			}
-		}
-		sc.close();
+		}//programa	
 
+		sc.close();
 	}
 }

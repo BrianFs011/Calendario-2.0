@@ -5,10 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Calendario {
-	private Integer mes;
-	private Integer ano;
-	private Date today = new Date();
-	private Calendar cal = Calendar.getInstance();
+	private Integer  mes;
+	private Integer  ano;
+	private Calendar cal   = Calendar.getInstance();
 
 	public Calendario(Integer ano, Integer mes) {
 		this.ano = ano;
@@ -21,10 +20,6 @@ public class Calendario {
 
 	public Integer getAno() {
 		return ano;
-	}
-	
-	public Date getToday() {
-		return today;
 	}
 
 	//matriz 
