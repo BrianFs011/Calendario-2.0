@@ -1,6 +1,11 @@
 package entities;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import application.UI;
 
 public class Agenda {
 
@@ -11,23 +16,21 @@ public class Agenda {
 	private double value;
 	private String save = "E:\\ws-eclipse\\Calendario 2.0\\save";
 	
-	public Agenda(int day, int month, int year) {
+	public Agenda() {
+
+	}
+	
+	public Agenda(int day, int month, int year, String note, double value) {
 		this.day   = day;
 		this.month = month;
 		this.year  = year;
 		
 		String convert ="\\"+String.valueOf(day)+ String.valueOf(month)+ String.valueOf(year);
-		
-		boolean success = new File(save+ convert).mkdir();
-			for(int i=0; i>0; i++) {
-			System.out.println("Nova pasta criada "+ success);
-		}		
-	}
-		
-	public Agenda(String note, double value) {
+		@SuppressWarnings("unused")
+		boolean success = new File(save+ convert).mkdir();		
+			
 		this.note  = note;
 		this.value = value;
-
 	}
 
 	public int getDay() {
@@ -50,7 +53,7 @@ public class Agenda {
 		return value;
 	}
 	
-	public String save() {
+	public String getSave() {
 		return save;
 	}
 
@@ -59,4 +62,22 @@ public class Agenda {
 		String path = save + convert + "\\note.txt";
 		return path;	
 	}	
+	
+	public void newFolder(){
+		
+	}
+	
+	public void write() {
+		String convert ="\\"+String.valueOf(day)+ String.valueOf(month)+ String.valueOf(year);
+		String path = save + convert + "\\note.txt";
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
+			bw.write(note+" R$-"+String.format("%.2f", value));
+			bw.newLine();
+			System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
+		}
+		catch(IOException e) {
+			System.out.println("!Fogo no parquinho escrita Agenda!");
+			e.printStackTrace();
+		}
+	}
 }

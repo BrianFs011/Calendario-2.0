@@ -1,13 +1,10 @@
 package application;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.InputMismatchException;
-import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import entities.Agenda;
@@ -18,67 +15,82 @@ public class Program {
 
 	public static void main(String[]args) {
 		
+		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		List<Agenda>agenda = new ArrayList<>();
+		Agenda agenda = new Agenda();
 		Date today = new Date();
+		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat month = new SimpleDateFormat("MM");
 		SimpleDateFormat year  = new SimpleDateFormat("yyyy");
-		
-		UI.clearScreen();
-		
-		int todayMonth = Integer.parseInt(month.format(today));
-		int todayYear = Integer.parseInt(year.format(today));
+				
+		int todayMonth   = Integer.parseInt(month.format(today));
+		int todayYear    = Integer.parseInt(year.format(today ));
+		int first        = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
+		int lastDayMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
 		Calendario calT = new Calendario(todayYear, todayMonth);
+		//clearScreen
+		UI.clearScreen();
+		//printCalendarioToday
 		UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());	
+		//valor total
+		UI.printAgenda(agenda.getSave());
+		
 		//add agenda?
 		System.out.print("New Agenda? (y/n) ");
 		char responseAgenda = sc.next().charAt(0);
+		//clearScreen
+		UI.clearScreen();
+		//printCalendarioToday
+		UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());	
+		//valor total
+		UI.printAgenda(agenda.getSave());
 		while (responseAgenda != 'y' && responseAgenda != 'n') {
 			System.out.print("Digite: (y/n) ");
 			responseAgenda = sc.next().charAt(0);
 		}
-		
+		//add nota
 		if(responseAgenda == 'y') {
-			System.out.print("Digite um dia: ");
-			int day = sc.nextInt();
-			while(day < 1 || day >= 31) {
-				System.out.print("Digite um dia: ");
-				day = sc.nextInt();
-			}
-			agenda.add(new Agenda(day, todayMonth, todayYear));
 			//add nova nota?
 			boolean renponseDay = true;
 			while(renponseDay == true) {
-				
+				System.out.print("Digite um dia  : ");
+				int day = sc.nextInt();
+				while(day < first || day > lastDayMonth) {
+					System.out.print("Digite um dia: ");
+					day = sc.nextInt();
+				}
+				//clearScreen
+				UI.clearScreen();
+				//printCalendarioToday&day
+				UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday(), day);
+				//valor total
+				UI.printAgenda(agenda.getSave());
+				//quebra de linha
 				sc.nextLine();
-				System.out.print("Digite um note: ");
+				System.out.print("Digite um note : ");
 				String note  = sc.nextLine();
 				System.out.print("Digite um valor: ");
 				double value = sc.nextDouble(); 
+				Agenda agd = new Agenda(day, todayMonth, todayYear, note, value);
+				//escriver
+				agd.write();
+				//ler
+				UI.printAgenda(day, todayMonth, todayYear, agd.path());
 				
-				//escrita		
-				Agenda agd = new Agenda(day, todayMonth, todayYear);
-				try(BufferedWriter bw = new BufferedWriter(new FileWriter(agd.path(), true))){
-					for(Agenda agda : agenda) {
-						bw.write(note+" R$-"+String.format("%.2f", value));
-						bw.newLine();
-					}
-					System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
-				}
-				catch(IOException e) {
-					System.out.println("!Fogo no parquinho escrita Agenda!");
-					e.printStackTrace();
-				}
-			
-				UI.printAgenda(day, todayMonth, todayYear, agd.save());
-				
+				//repetir?
 				System.out.print("Add new note? (y/n) ");
 				char rd = sc.next().charAt(0); 
 				while(rd != 'n' && rd != 'y') {
 					System.out.print("Digite: (y/n) ");
 					rd = sc.next().charAt(0); 
 				}
+				//clearScreen
+				UI.clearScreen();
+				//printCalendarioToday&day
+				UI.printScreen(calT.allDays(), calT.buscaLinhaMatriz(calT.allDays()), todayMonth, todayYear, calT.getToday());
+				//valor total
+				UI.printAgenda(agenda.getSave());
 				if(rd == 'n') {
 					renponseDay = false;				
 				}
