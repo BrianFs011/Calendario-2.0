@@ -54,6 +54,7 @@ public class UI {
 					if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
 						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
 					}
+					
 					else{
 						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
 					}
@@ -99,17 +100,24 @@ public class UI {
 	
 	//imprimir agenda
 	public static void printAgenda(int year, int month, int day, String path) {
-		try(BufferedReader br = new BufferedReader(new FileReader(path))){
-			String line = br.readLine();
-			while (line != null) {
- 				System.out.println(ANSI_RED+line+" "+ANSI_RESET);
-				line = br.readLine();
+
+		File testPath = new File(path);
+		if (testPath.exists() && !testPath.isDirectory()) {
+			try(BufferedReader br = new BufferedReader(new FileReader(path))){
+				String line = br.readLine();
+				while (line != null) {
+					System.out.println(ANSI_RED+line+" "+ANSI_RESET);
+					line = br.readLine();
+				}
+			}
+			catch(IOException e) {
+				System.out.println("!Fogo no parquinho leitura Agenda!");
+				e.printStackTrace();
 			}
 		}
-		catch(IOException e) {
-			System.out.println("!Fogo no parquinho leitura Agenda!");
-			e.printStackTrace();
-		}
+		else {
+			System.out.println(ANSI_YELLOW+"!NOTHING FOUND!"+ANSI_RESET);
+			}		
 	}
 	
 	//imprime a soma
@@ -132,6 +140,6 @@ public class UI {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Gastos do mes  : "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);			
+		System.out.println("TOTAL SPEND: "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);			
 	}
 }

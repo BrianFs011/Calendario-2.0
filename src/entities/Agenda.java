@@ -7,19 +7,14 @@ import java.io.IOException;
 
 import application.UI;
 
-public class Agenda {
+public class Agenda extends Dates{
 
-	private int    day;
-	private int    month;
-	private int    year;
 	private String note;
 	private double value;
 	private String save = "E:\\ws-eclipse\\Calendario 2.0\\save";
 	
-	public Agenda(int year, int month, int day) {
-		this.year  = year;
-		this.month = month;
-		this.day   = day;
+	public Agenda(Integer year, Integer month, Integer day) {
+		super(year, month, day);
 		
 		String convertYear  ="\\"+String.valueOf(year) ;
 		String convertmonth ="\\"+String.valueOf(month);
@@ -61,19 +56,6 @@ public class Agenda {
 		this.note  = note;
 		this.value = value;
 	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
 	public String getNote() {
 		return note;
 	}

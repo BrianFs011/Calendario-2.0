@@ -4,22 +4,11 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Calendario {
-	private Integer  mes;
-	private Integer  ano;
+public class Calendario extends Dates{
 	private Calendar cal   = Calendar.getInstance();
 
-	public Calendario(Integer ano, Integer mes) {
-		this.ano = ano;
-		this.mes = mes;
-	}
-
-	public Integer getMes() {
-		return mes;
-	}
-
-	public Integer getAno() {
-		return ano;
+	public Calendario(Integer year, Integer month) {
+		super(year, month);
 	}
 
 	//matriz 
@@ -44,10 +33,10 @@ public class Calendario {
 	@SuppressWarnings("deprecation")
 	public int buscaLinhaMatriz(Date[][] corpo) {
 		int linhaI = 0;
-		int subAno = ano - 1900;
+		int subAno = year - 1900;
 		for(int i = 0; i<corpo.length; i++) {
 			for(int j = 0; j<7; j++) {
-				if(corpo[i][j].getMonth() +1 == mes && corpo[i][j].getYear() == subAno) {
+				if(corpo[i][j].getMonth() +1 == month && corpo[i][j].getYear() == subAno) {
 					linhaI = i;
 					
 					j += 8;
