@@ -69,12 +69,21 @@ public class Agenda extends Dates{
 	}
 
 	public String path() {
-		/*String convert      ="\\"+String.valueOf(day)+ String.valueOf(month)+ String.valueOf(year);*/
+
 		String convertYear  ="\\"+String.valueOf(year) ;
 		String convertmonth ="\\"+String.valueOf(month);
 		String convertday   ="\\"+String.valueOf(day)  ;
 			
 		String path = save+ convertYear+ convertmonth+ convertday+ "\\note.txt";
+		return path;	
+	}	
+	
+	public String direct() {
+
+		String convertYear  ="\\"+String.valueOf(year) ;
+		String convertmonth ="\\"+String.valueOf(month);
+			
+		String path = save+ convertYear+ convertmonth;
 		return path;	
 	}	
 	

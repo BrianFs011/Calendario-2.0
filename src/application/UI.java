@@ -38,21 +38,29 @@ public class UI {
 	}
 	//PrintToday
 	@SuppressWarnings("deprecation")
-	public static void printScreen(Date[][] corpo, int linhaI, int todayYear, int todayMonth, Date today) {
+	public static void printScreen(Date[][] corpo, int linhaI, int todayYear, int todayMonth, Date today, String direct) {
 		//Boas vindas
 		System.out.println("Calendario (1970-2075)");
 		System.out.println();
 		System.out.println("----------"+month.format(corpo[linhaI][6])+"/"+todayYear+"---------");
 		System.out.print  ("dom seg ter qua qui sex sab");
 		
+		//+ convertday+ "\\note.txt"
 		for(int i=linhaI; i<=linhaI+5; i++) {
 			System.out.println();
 			for (int j=0; j<7; j++) {
+				String dia = String.valueOf(corpo[i][j].getDate());
+				String convert = direct+"\\"+dia+"\\note.txt";
+				File testPath = new File(convert);
 				
 				//imprimi
 				if(corpo[i][j].getMonth() + 1== todayMonth) {
 					if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
 						System.out.print(" "+ANSI_BLUE_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
+					}
+					
+					else  if(testPath.exists()) {
+						System.out.print(" "+ANSI_RED_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
 					}
 					
 					else{
@@ -68,7 +76,7 @@ public class UI {
 	}
 	//PrintToday&Day
 	@SuppressWarnings("deprecation")
-	public static void printScreen(Date[][] corpo, int linhaI, int Year, int Month, int newDay, Date today) {
+	public static void printScreen(Date[][] corpo, int linhaI, int Year, int Month, int newDay, Date today, String direct) {
 		//Boas vindas
 		System.out.println("Calendario (1970-2075)");
 		System.out.println();
@@ -78,6 +86,10 @@ public class UI {
 		for(int i=linhaI; i<=linhaI+5; i++) {
 			System.out.println();
 			for (int j=0; j<7; j++) {
+				String dia = String.valueOf(corpo[i][j].getDate());
+				String convert = direct+"\\"+dia+"\\note.txt";
+				File testPath = new File(convert);
+				
 				//imprimi
 				if(corpo[i][j].getMonth() + 1== Month) {
 					if(corpo[i][j].getDate() == newDay) {							
@@ -86,6 +98,11 @@ public class UI {
 					else if(corpo[i][j].getDate() == today.getDate() && corpo[i][j].getMonth() == today.getMonth() && corpo[i][j].getYear() == today.getYear()) {							
 						System.out.print(" "+ANSI_BLUE_BACKGROUND  + day.format(corpo[i][j])+ANSI_RESET+" ");
 					}
+					
+					else  if(testPath.exists()) {
+						System.out.print(" "+ANSI_RED_BACKGROUND+ day.format(corpo[i][j])+ANSI_RESET+" ");
+					}
+					
 					else{
 						System.out.print(" "+ day.format(corpo[i][j])+" ");																				
 					}
