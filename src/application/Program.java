@@ -37,7 +37,7 @@ public class Program {
 				UI.clearScreen();
 				UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 				UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-				UI.printAgenda(agend.pathYearMonth());
+				UI.printTotalMonth(agend.pathYearMonth());
 				// }
 				
 				System.out.print ("NOTE: READ/WRITE|TODAY/DATE ");
@@ -47,7 +47,7 @@ public class Program {
 					UI.clearScreen();
 					UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 					UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-					UI.printAgenda(agend.pathYearMonth());
+					UI.printTotalMonth(agend.pathYearMonth());
 					// }
 					System.out.print("WRITE: (R/W/T/D/E) ");
 					responseAgenda = sc.next().charAt(0);
@@ -57,7 +57,7 @@ public class Program {
 				UI.clearScreen();
 				UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 				UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-				UI.printAgenda(agend.pathYearMonth());
+				UI.printTotalMonth(agend.pathYearMonth());
 				// }
 
 				if(responseAgenda == 'r') {
@@ -73,7 +73,8 @@ public class Program {
 								//UI.clearScreen();
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								UI.printAgenda(agend.pathYearMonth());
+								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, day, todayDate, agend.pathYearMonth(), agend.getFile());								
+								UI.printTotalMonth(agend.pathYearMonth());
 								UI.printAgenda(year, month, day, agenda.pathFile());
 								
 								System.out.print("READ OTHER DAY? (YES/NO) ");
@@ -89,7 +90,8 @@ public class Program {
 								//UI.clearScreen();
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								UI.printAgenda(agend.pathYearMonth());	
+								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								
+								UI.printTotalMonth(agend.pathYearMonth());	
 							}
 						catch(CalendarioException e) {
 							System.out.println("WRITE DAY (1/"+date.toString(month)+") ");
@@ -119,7 +121,8 @@ public class Program {
 								//Bloco de impreção (Limpa a tela, imprime calendario e day, imprime valor total){
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								UI.printAgenda(agend.pathYearMonth());
+								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, day, todayDate, agend.pathYearMonth(), agend.getFile());								
+								UI.printTotalMonth(agend.pathYearMonth());
 								// }
 								
 								//quebra de linha
@@ -162,7 +165,8 @@ public class Program {
 								//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								UI.printAgenda(agend.pathYearMonth());
+								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								
+								UI.printTotalMonth(agend.pathYearMonth());
 								// }	
 								
 							}
@@ -182,7 +186,7 @@ public class Program {
 					UI.clearScreen();
 					UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 					UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-					UI.printAgenda(agend.pathYearMonth());
+					UI.printTotalMonth(agend.pathYearMonth());
 					// }
 					boolean excepition = true;
 					while (excepition == true) {

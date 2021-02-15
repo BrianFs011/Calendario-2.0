@@ -155,7 +155,7 @@ public class UI {
 	}
 	
 	//imprime a soma
-	public static void printAgenda(String save) {
+	public static void printTotalMonth(String save) {
 		File testPath = new File(save);
 
 		File path = new File(save);
