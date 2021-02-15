@@ -20,7 +20,6 @@ public class Program {
 		Date todayDate    = new Date();
 		Dates date = new Dates();
 		
-		
 		SimpleDateFormat todayYear  = new SimpleDateFormat("yyyy");
 		SimpleDateFormat todayMonth = new SimpleDateFormat("MM")  ;
 		SimpleDateFormat todayDay   = new SimpleDateFormat("dd")  ;
@@ -98,13 +97,22 @@ public class Program {
 					}
 				}
 				
-				else if(responseAgenda == 'w') {
+				else if(responseAgenda == 'w' || responseAgenda == 't') {
 					
 					boolean otherDay = true;
 					while  (otherDay == true) {
 						try {
-							System.out.print("WRITE DAY  : ");
-							int day = sc.nextInt();
+							
+							int day = 0;
+							if (responseAgenda == 'w') {
+								
+								System.out.print("WRITE DAY  : ");
+								day = sc.nextInt();
+							}
+							else {
+								
+								day = Integer.parseInt(todayDay.format(todayDate));
+							}
 							
 							boolean newNote = true;
 							while(newNote == true) {
@@ -143,6 +151,7 @@ public class Program {
 								}
 								else if (responseNewNote == 'o') {
 									newNote  = false;
+									responseAgenda = 'w';
 									otherDay = true;
 								}
 								else {
@@ -168,65 +177,6 @@ public class Program {
 					}
 				}
 				
-				else if(responseAgenda == 't') {
-						
-						int day = Integer.parseInt(todayDay.format(todayDate));
-						
-						boolean newNote = true;
-						while(newNote == true) {
-							//Bloco de impreção (Limpa a tela, imprime calendario e day, imprime valor total){
-							UI.clearScreen();
-							UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-							UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());							UI.printAgenda(agend.pathYearMonth());
-							// }
-								
-							try {		
-								//quebra de linha
-								sc.nextLine();
-								System.out.print("WRITE NOTE : ");
-								String note  = sc.nextLine();
-							
-								System.out.print("WHITE PRICE: ");
-								double value = sc.nextDouble(); 
-								Agenda agenda = new Agenda(year, month, day, note, value);
-								
-								//newFolder
-								agenda.newFolder();
-								//escriver
-								agenda.write();
-								//ler
-								UI.printAgenda(year, month, day, agenda.pathFile());
-								
-								//repetir?
-								System.out.print("ADD NEW NOTE? (YES/NO) ");
-								char responseNewNote = sc.next().charAt(0); 
-								
-								while(responseNewNote != 'y' && responseNewNote != 'n') {
-									System.out.print("WRITE: (Y/N) ");
-									responseNewNote = sc.next().charAt(0); 
-								}
-								
-								if(responseNewNote == 'y') {
-									newNote  = true;
-								}
-								else {
-									newNote  = false;
-								}
-								
-								//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
-								UI.clearScreen();
-								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
-								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								UI.printAgenda(agend.pathYearMonth());
-								// }
-							}
-							catch(InputMismatchException e) {
-								System.out.println("WRITE VALUE WITH(.) ");
-								sc.next();
-							}
-					
-							}//renponseDay
-						}
-
 				else if (responseAgenda == 'd') {			
 					//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
 					UI.clearScreen();
