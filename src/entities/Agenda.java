@@ -1,7 +1,9 @@
 package entities;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -52,18 +54,52 @@ public class Agenda extends Dates{
 		return path;	
 	}
 	
-	
-	public void write() {
+	public void write(boolean operacao) {
 		
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(pathFile(), true))){
-			bw.write(note+" R$-"+String.format("%.2f", value));
-			bw.newLine();
-			System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
+			if (operacao == true) {
+				bw.write(note+" R$,+"+String.format("%.2f", value));
+				bw.newLine();
+				System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
+			}
+			else {
+				
+				bw.write(note+" R$,-"+String.format("%.2f", value));
+				bw.newLine();
+				System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
+			}
 		}
 		catch(IOException e) {
 			System.out.println("!Fogo no parquinho escrita Agenda!");
 			e.printStackTrace();
 		}
+	}
+	
+	public double totalMonth(int year, int month, int day) {
+		
+		File testPath = new File(pathFile());
+		
+		double som   = 0;
+		
+		if (testPath.exists() && !testPath.isDirectory()) {
+			try(BufferedReader br = new BufferedReader(new FileReader(pathFile()))){
+				String line = br.readLine();
+				while (line != null) {
+					String[] vect = line.split(",");	
+					
+					som += Double.parseDouble(vect[1]);	
+					
+					line = br.readLine();
+
+				}
+			}
+			catch(IOException e) {
+				System.out.println("!Fogo no parquinho leitura Agenda!");
+				e.printStackTrace();
+			}
+		}
+		return som;
+	
 	}
 	
 	public String getNote() {

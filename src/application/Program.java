@@ -32,22 +32,22 @@ public class Program {
 	
 				Calendario calendario = new Calendario(year, month, 1);
 				Agenda agend = new Agenda(year, month, 1);
-				
+								
 				//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
 				UI.clearScreen();
 				UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 				UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-				UI.printTotalMonth(agend.pathYearMonth());
+				UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 				// }
 				
-				System.out.print ("NOTE: READ/WRITE|TODAY/DATE ");
+				System.out.print ("READ/WRITE|TODAY/DATE ");
 				char responseAgenda = sc.next().charAt(0);
 				while (responseAgenda != 'r' && responseAgenda != 'w' && responseAgenda != 'd' && responseAgenda != 'e' && responseAgenda != 't') {
 					//Bloco de impreção (Limpa a tela, imprime calendario, imprime valor total){
 					UI.clearScreen();
 					UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 					UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-					UI.printTotalMonth(agend.pathYearMonth());
+					UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 					// }
 					System.out.print("WRITE: (R/W/T/D/E) ");
 					responseAgenda = sc.next().charAt(0);
@@ -57,7 +57,7 @@ public class Program {
 				UI.clearScreen();
 				UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 				UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-				UI.printTotalMonth(agend.pathYearMonth());
+				UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 				// }
 
 				if(responseAgenda == 'r') {
@@ -69,12 +69,11 @@ public class Program {
 								int day = sc.nextInt();
 
 								Agenda agenda = new Agenda(year, month, day);
-								
 								//UI.clearScreen();
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, day, todayDate, agend.pathYearMonth(), agend.getFile());								
-								UI.printTotalMonth(agend.pathYearMonth());
+								UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 								UI.printAgenda(year, month, day, agenda.pathFile());
 								
 								System.out.print("READ OTHER DAY? (YES/NO) ");
@@ -91,7 +90,7 @@ public class Program {
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								
-								UI.printTotalMonth(agend.pathYearMonth());	
+								UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());	
 							}
 						catch(CalendarioException e) {
 							System.out.println("WRITE DAY (1/"+date.toString(month)+") ");
@@ -116,15 +115,31 @@ public class Program {
 								day = Integer.parseInt(todayDay.format(todayDate));
 							}
 							
+							
 							boolean newNote = true;
 							while(newNote == true) {
 								//Bloco de impreção (Limpa a tela, imprime calendario e day, imprime valor total){
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, day, todayDate, agend.pathYearMonth(), agend.getFile());								
-								UI.printTotalMonth(agend.pathYearMonth());
+								UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 								// }
 								
+								System.out.print("GAIN OR SPEND? ");
+								char saldo = sc.next().charAt(0);
+								while(saldo != 'g' && saldo != 's') {
+									System.out.print("WRITE (g/s) ");
+									saldo = sc.next().charAt(0);
+								}
+
+								boolean operacao;
+								if (saldo == 'g') {
+									operacao = true ;
+								}
+								else {
+									operacao = false;
+								}							
+																
 								//quebra de linha
 								sc.nextLine();
 								System.out.print("WRITE NOTE : ");
@@ -136,7 +151,7 @@ public class Program {
 								//newFolder
 								agenda.newFolder();
 								//escriver
-								agenda.write();
+								agenda.write(operacao);
 								//ler
 								UI.printAgenda(year, month, day, agenda.pathFile());
 								
@@ -166,7 +181,7 @@ public class Program {
 								UI.clearScreen();
 								UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 								UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());								
-								UI.printTotalMonth(agend.pathYearMonth());
+								UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 								// }	
 								
 							}
@@ -186,7 +201,7 @@ public class Program {
 					UI.clearScreen();
 					UI.printTop(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year);
 					UI.printScreen(calendario.allDays(), calendario.buscaLinhaMatriz(calendario.allDays()), year, month, todayDate, agend.pathYearMonth(), agend.getFile());
-					UI.printTotalMonth(agend.pathYearMonth());
+					UI.printTotalMonth(agend.pathYearMonth(), agend.getFile());
 					// }
 					boolean excepition = true;
 					while (excepition == true) {

@@ -31,6 +31,7 @@ public class UI {
 	private static final SimpleDateFormat day = new SimpleDateFormat("dd");
 	private static final SimpleDateFormat month = new SimpleDateFormat("MMM");
 	//ClearScreen
+	
 	public static void clearScreen() { 
 		System.out.println();
 		System.out.print("\033[H\033[2J"); 
@@ -48,14 +49,33 @@ public class UI {
 	//PrintToday
 	@SuppressWarnings("deprecation")
 	public static void printScreen(Date[][] corpo, int linhaI, int todayYear, int todayMonth, Date today, String pathYearMonth, String file) {
-		
-		//+ convertday+ "\\note.txt"
+	
 		for(int i=linhaI; i<=linhaI+5; i++) {
 			System.out.println();
 			for (int j=0; j<7; j++) {
 				String dia = String.valueOf(corpo[i][j].getDate());
 				String convert = pathYearMonth+"\\"+dia+ file;
 				File testPath = new File(convert);
+				
+				double som   = 0;
+				
+				if (testPath.exists() && !testPath.isDirectory()) {
+					try(BufferedReader br = new BufferedReader(new FileReader(testPath))){
+						String line = br.readLine();
+						while (line != null) {
+							String[] vect = line.split(",");	
+							
+							som += Double.parseDouble(vect[1]);	
+							
+							line = br.readLine();
+							
+						}
+					}
+					catch(IOException e) {
+						System.out.println("!Fogo no parquinho leitura Agenda!");
+						e.printStackTrace();
+					}
+				}
 				
 				//imprimi
 				if(corpo[i][j].getMonth() + 1== todayMonth) {
@@ -64,7 +84,12 @@ public class UI {
 					}
 					
 					else  if(testPath.exists()) {
-						System.out.print(" "+ANSI_RED_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");
+						if(som < 0) {
+							System.out.print(" "+ANSI_RED_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");														
+						}
+						else {
+							System.out.print(" "+ANSI_GREEN_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");	
+						}
 					}
 					
 					else{
@@ -81,7 +106,7 @@ public class UI {
 	//PrintToday&Day
 	@SuppressWarnings("deprecation")
 	public static void printScreen(Date[][] corpo, int linhaI, int Year, int Month, int newDay, Date today, String pathYearMonth, String file) {
-	
+		
 		for(int i=linhaI; i<=linhaI+5; i++) {
 			System.out.println();
 			for (int j=0; j<7; j++) {
@@ -89,6 +114,25 @@ public class UI {
 				String convert = pathYearMonth+ "\\"+ dia+ file;
 				File testPath = new File(convert);
 				
+				double som   = 0;
+				
+				if (testPath.exists() && !testPath.isDirectory()) {
+					try(BufferedReader br = new BufferedReader(new FileReader(testPath))){
+						String line = br.readLine();
+						while (line != null) {
+							String[] vect = line.split(",");	
+							
+							som += Double.parseDouble(vect[1]);	
+							
+							line = br.readLine();
+							
+						}
+					}
+					catch(IOException e) {
+						System.out.println("!Fogo no parquinho leitura Agenda!");
+						e.printStackTrace();
+					}
+				}
 				//imprimi
 				if(corpo[i][j].getMonth() + 1== Month) {
 					if(corpo[i][j].getDate() == newDay) {							
@@ -99,7 +143,13 @@ public class UI {
 					}
 					
 					else  if(testPath.exists()) {
-						System.out.print(" "+ANSI_RED_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");
+						if (som < 0) {
+							System.out.print(" "+ANSI_RED_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");
+							
+						}
+						else {
+							System.out.print(" "+ANSI_GREEN_BACKGROUND+ ANSI_BLACK+ day.format(corpo[i][j])+ANSI_RESET+" ");
+						}
 					}
 					
 					else{
@@ -118,20 +168,27 @@ public class UI {
 	public static void printAgenda(int year, int month, int day, String path) {
 
 		File testPath = new File(path);
-		double price = 0;
-		int cont = 0;
+		double som   = 0;
+		int    cont  = 0;
 		
 		System.out.println();
-		System.out.println("SPEND DAY :");
+		System.out.println("DAY SPEND :");
 		
 		if (testPath.exists() && !testPath.isDirectory()) {
 			try(BufferedReader br = new BufferedReader(new FileReader(path))){
 				String line = br.readLine();
 				while (line != null) {
-					String[] vect = line.split("-");
-					price += Double.parseDouble(vect[1]);
+					String[] vect = line.split(",");	
+					String name = vect[0];
+					double price = Double.parseDouble(vect[1]);	
+					som += Double.parseDouble(vect[1]);	
 					
-					System.out.println(ANSI_RED+line+" "+ANSI_RESET);
+					if (price < 0) {
+						System.out.println(ANSI_RED+name+ " R$" + String.format("%.2f", price)+" "+ANSI_RESET);						
+					}
+					else {
+						System.out.println(ANSI_GREEN+name+ " R$"+ String.format("%.2f", price)+" "+ANSI_RESET);		
+					}
 					line = br.readLine();
 					cont ++;
 				}
@@ -141,8 +198,15 @@ public class UI {
 				e.printStackTrace();
 			}
 			if(cont > 1) {
-				System.out.println(ANSI_RED+"___________________________"+ANSI_RESET);
-				System.out.println("TOTAL: "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);
+				System.out.println(ANSI_WHITE+"___________________________"+ANSI_RESET);
+				
+				if(som < 0) {
+					
+					System.out.println("TOTAL: "+ANSI_RED  +"R$"+String.format("%.2f", som)+ANSI_RESET);
+				}
+				else {
+					System.out.println("TOTAL: "+ANSI_GREEN+"R$"+String.format("%.2f", som)+ANSI_RESET);
+				}
 				System.out.println();
 			}
 			else {
@@ -155,7 +219,7 @@ public class UI {
 	}
 	
 	//imprime a soma
-	public static void printTotalMonth(String save) {
+	public static double printTotalMonth(String save, String file) {
 		File testPath = new File(save);
 
 		File path = new File(save);
@@ -164,11 +228,13 @@ public class UI {
 		double price = 0;
 		if (testPath.exists()) {
 			for(File folder : folders) {	
-				try(BufferedReader br = new BufferedReader(new FileReader(folder+ "\\note.txt"))){
+				try(BufferedReader br = new BufferedReader(new FileReader(folder+ file))){
 					String line = br.readLine();
 					while (line != null) {
-						String[] vect = line.split("-");
-						price += Double.parseDouble(vect[1]);												
+						String[] vect = line.split(",");
+						price += Double.parseDouble(vect[1]);	
+						
+						
 						line = br.readLine();
 					}
 				}
@@ -178,6 +244,15 @@ public class UI {
 				}
 			}
 		}
-		System.out.println("TOTAL SPEND: "+ANSI_RED+"R$-"+String.format("%.2f", price)+ANSI_RESET);			
+		if (price < 0) {
+			System.out.println("TOTAL SPEND: "+ ANSI_RED  + "R$"+String.format("%.2f", price)+ANSI_RESET);								
+		}
+		else if (price == 0) {
+			System.out.println("TOTAL SPEND: "+ ANSI_WHITE+ "R$"+String.format("%.2f", price)+ANSI_RESET);
+		}
+		else {
+			System.out.println("TOTAL SPEND: "+ ANSI_GREEN+ "R$"+String.format("%.2f", price)+ANSI_RESET);				
+		}
+		return price;
 	}
 }
