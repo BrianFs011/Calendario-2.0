@@ -12,36 +12,20 @@ public class Agenda extends Dates{
 	private String note;
 	private double value;
 	private String save = "E:\\ws-eclipse\\Calendario 2.0\\save";
+	private String file = "\\note.txt";
 	
 	public Agenda(Integer year, Integer month, Integer day) {
 		super(year, month, day);
-		
-		String convertYear  ="\\"+String.valueOf(year) ;
-		String convertmonth ="\\"+String.valueOf(month);
-		
-		@SuppressWarnings("unused")
-		boolean newFolderYear  = new File(save+ convertYear).mkdir();
-		@SuppressWarnings("unused")
-		boolean newFolderMonth = new File(save+ convertYear+ convertmonth).mkdir();
-		@SuppressWarnings("unused")
-		boolean folderException= new File(save+ convertYear+ convertmonth+ "\\exception").mkdir();
-		
-		String path = save+ convertYear+ convertmonth+ "\\exception"+ "\\note.txt";
-		try(BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
-			bw.write("-0");
-			bw.newLine();
-		}
-		catch(IOException e) {
-			System.out.println("!Fogo no parquinho escrita Agenda!");
-			e.printStackTrace();
-		}
 	}
 	
-	public Agenda(int year, int month, int day, String note, double value) {
-		this.year  = year;
-		this.month = month;
-		this.day   = day;	
+	public Agenda(Integer year, Integer month, Integer day, String note, double value) {
+		super(year, month, day);
 		
+		this.note  = note;
+		this.value = value;
+	}
+	
+	public void newFolder() {
 		String convertYear  ="\\"+String.valueOf(year) ;
 		String convertmonth ="\\"+String.valueOf(month);
 		String convertday   ="\\"+String.valueOf(day)  ;
@@ -52,49 +36,26 @@ public class Agenda extends Dates{
 		boolean newFolderMonth = new File(save+ convertYear+ convertmonth).mkdir();
 		@SuppressWarnings("unused")
 		boolean newFolderDay   = new File(save+ convertYear+ convertmonth+ convertday).mkdir();
-		
-		this.note  = note;
-		this.value = value;
-	}
-	public String getNote() {
-		return note;
-	}
-
-	public double getValue() {
-		return value;
 	}
 	
-	public String getSave() {
+	public String pathYearMonth() {
 		return save+"\\"+year+"\\"+month;
 	}
 
-	public String path() {
-
+	public String pathFile() {
+		
 		String convertYear  ="\\"+String.valueOf(year) ;
 		String convertmonth ="\\"+String.valueOf(month);
 		String convertday   ="\\"+String.valueOf(day)  ;
-			
-		String path = save+ convertYear+ convertmonth+ convertday+ "\\note.txt";
+		
+		String path = save+ convertYear+ convertmonth+ convertday+ file;
 		return path;	
-	}	
+	}
 	
-	public String direct() {
-
-		String convertYear  ="\\"+String.valueOf(year) ;
-		String convertmonth ="\\"+String.valueOf(month);
-			
-		String path = save+ convertYear+ convertmonth;
-		return path;	
-	}	
 	
 	public void write() {
-		String convertYear  ="\\"+String.valueOf(year) ;
-		String convertmonth ="\\"+String.valueOf(month);
-		String convertday   ="\\"+String.valueOf(day)  ;
-			
-		String path = save+ convertYear+ convertmonth+ convertday+ "\\note.txt";
-	
-		try(BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
+		
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(pathFile(), true))){
 			bw.write(note+" R$-"+String.format("%.2f", value));
 			bw.newLine();
 			System.out.println(UI.ANSI_GREEN+"SAVE"+UI.ANSI_RESET);
@@ -104,4 +65,20 @@ public class Agenda extends Dates{
 			e.printStackTrace();
 		}
 	}
+	
+	public String getNote() {
+		return note;
+	}
+
+	public double getValue() {
+		return value;
+	}
+	
+	public String getSave() {
+		return save;
+	}
+
+	public String getFile() {
+		return file;
+	}	
 }

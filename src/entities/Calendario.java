@@ -5,10 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Calendario extends Dates{
-	private Calendar cal   = Calendar.getInstance();
+	private   Calendar calendar   = Calendar.getInstance();
 
-	public Calendario(Integer year, Integer month) {
-		super(year, month);
+	public Calendario(Integer year, Integer month, Integer day) {
+		super(year, month, day);
 	}
 
 	//matriz 
@@ -21,9 +21,9 @@ public class Calendario extends Dates{
 				
 				corpo[i][j] = dia;
 				
-				cal.setTime(dia);
-				cal.add(Calendar.DAY_OF_MONTH, 1);
-				dia = cal.getTime();
+				calendar.setTime(dia);
+				calendar.add(Calendar.DAY_OF_MONTH, 1);
+				dia = calendar.getTime();
 				
 			}
 		}
