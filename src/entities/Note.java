@@ -27,6 +27,6 @@ public class Note implements Comparable<Note>{
 	}
 	@Override
 	public int compareTo(Note other) {
-		return -price.compareTo(other.getPrice());
+		return price.compareTo(other.getPrice());
 	}
 }

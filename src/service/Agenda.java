@@ -27,9 +27,10 @@ public class Agenda extends Dates{
 	
 	public Agenda(Integer year, Integer month, Integer day) {
 		super(year, month, day);
+		System.out.println(year+month+day);
 	}
 	
-	public Agenda(Integer year, Integer month, Integer day, String note, double value) {
+	public Agenda(Integer year, Integer month,  Integer day, String note, double value) {
 		super(year, month, day);
 		
 		this.note  = note;
@@ -63,7 +64,7 @@ public class Agenda extends Dates{
 		return path;	
 	}
 	
-	public void write(boolean operacao) {
+	public void write(boolean operacao, String note, double value) {
 		
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(pathFile(), true))){
 			if (operacao == true) {
@@ -84,9 +85,9 @@ public class Agenda extends Dates{
 		}
 	}
 	
-	public void readSomaDay() {
+	public void readSomaDay(String path) {
 		
-		File testPath = new File(pathFile());
+		File testPath = new File(path);
 		
 		if (testPath.exists() && !testPath.isDirectory()) {
 			System.out.println();
@@ -96,8 +97,8 @@ public class Agenda extends Dates{
 				String line = br.readLine();
 				while (line != null) {
 					
-					String[] vect = line.split(",");	
-					list.add(new Note(vect[0], Double.parseDouble(vect[1])));					
+					String[] vect = line.split(",");
+					list.add(new Note(vect[0], Double.parseDouble(vect[1])));											
 					line = br.readLine();
 
 				}
@@ -109,6 +110,7 @@ public class Agenda extends Dates{
 			}	
 		}
 		else {
+			System.out.println();
 			System.out.println(UI.ANSI_YELLOW+"!NOTHING FOUND!"+UI.ANSI_RESET);
 		}
 	}
@@ -152,6 +154,10 @@ public class Agenda extends Dates{
 
 	public String getFile() {
 		return file;
+	}
+	
+	public void setDay(int day){
+		this.day = day;
 	}
 
 	public List<Note> getList() {
