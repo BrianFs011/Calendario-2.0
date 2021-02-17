@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import entities.Note;
+import service.Agenda;
+
 public class UI {
 	//colors
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -56,6 +59,8 @@ public class UI {
 				String dia = String.valueOf(corpo[i][j].getDate());
 				String convert = pathYearMonth+"\\"+dia+ file;
 				File testPath = new File(convert);
+				
+				//agenda.totalMonth(testPath);
 				
 				double som   = 0;
 				
@@ -165,94 +170,45 @@ public class UI {
 	}
 	
 	//imprimir agenda
-	public static void printAgenda(int year, int month, int day, String path) {
-
-		File testPath = new File(path);
-		double som   = 0;
-		int    cont  = 0;
+	public static void printAgenda(Agenda agenda) {
 		
-		System.out.println();
-		System.out.println("DAY SPEND :");
+		agenda.readSomaDay();
 		
-		if (testPath.exists() && !testPath.isDirectory()) {
-			try(BufferedReader br = new BufferedReader(new FileReader(path))){
-				String line = br.readLine();
-				while (line != null) {
-					String[] vect = line.split(",");	
-					String name = vect[0];
-					double price = Double.parseDouble(vect[1]);	
-					som += Double.parseDouble(vect[1]);	
-					
-					if (price < 0) {
-						System.out.println(ANSI_RED+name+ " R$" + String.format("%.2f", price)+" "+ANSI_RESET);						
-					}
-					else {
-						System.out.println(ANSI_GREEN+name+ " R$"+ String.format("%.2f", price)+" "+ANSI_RESET);		
-					}
-					line = br.readLine();
-					cont ++;
-				}
-			}
-			catch(IOException e) {
-				System.out.println("!Fogo no parquinho leitura Agenda!");
-				e.printStackTrace();
-			}
-			if(cont > 1) {
-				System.out.println(ANSI_WHITE+"___________________________"+ANSI_RESET);
-				
-				if(som < 0) {
-					
-					System.out.println("TOTAL: "+ANSI_RED  +"R$"+String.format("%.2f", som)+ANSI_RESET);
-				}
-				else {
-					System.out.println("TOTAL: "+ANSI_GREEN+"R$"+String.format("%.2f", som)+ANSI_RESET);
-				}
-				System.out.println();
+		for(Note not : agenda.getList()) {
+			if(not.getPrice() < 0) {
+				System.out.println(ANSI_RED+   not.getNote()+ "R$"+ String.format("%.2f", not.getPrice())+ ANSI_RESET);								
 			}
 			else {
-				System.out.println();
+				System.out.println(ANSI_GREEN+ not.getNote()+ "R$"+ String.format("%.2f", not.getPrice())+ ANSI_RESET);								
 			}
 		}
+		System.out.println(ANSI_WHITE+"___________________________"+ANSI_RESET);
+		
+		
+		double soma = 0;
+		for(Note not : agenda.getList()) {
+			soma += not.getPrice();
+		}
+		
+		if(soma < 0) {
+			System.out.println("TOTAL: "+ ANSI_RED+   String.format("%.2f", soma)+ ANSI_RESET);								
+		}
 		else {
-			System.out.println(ANSI_YELLOW+"!NOTHING FOUND!"+ANSI_RESET);
-			}		
+			System.out.println("TOTAL: "+ ANSI_GREEN+ String.format("%.2f", soma)+ ANSI_RESET);								
+		}
 	}
 	
 	//imprime a soma
-	public static double printTotalMonth(String save, String file) {
-		File testPath = new File(save);
-
-		File path = new File(save);
-		File[] folders = path.listFiles(File::isDirectory);
+	public static void printTotalMonth(Agenda agenda) {
 		
-		double price = 0;
-		if (testPath.exists()) {
-			for(File folder : folders) {	
-				try(BufferedReader br = new BufferedReader(new FileReader(folder+ file))){
-					String line = br.readLine();
-					while (line != null) {
-						String[] vect = line.split(",");
-						price += Double.parseDouble(vect[1]);	
-						
-						
-						line = br.readLine();
-					}
-				}
-				catch(IOException e) {
-					System.out.println("!Fogo no parquinho leitura Agenda!");
-					e.printStackTrace();
-				}
-			}
+		if (agenda.readSomaMonth() < 0) {
+			System.out.println("TOTAL SPEND: "+ ANSI_RED  + "R$"+String.format("%.2f", agenda.readSomaMonth())+ANSI_RESET);								
 		}
-		if (price < 0) {
-			System.out.println("TOTAL SPEND: "+ ANSI_RED  + "R$"+String.format("%.2f", price)+ANSI_RESET);								
-		}
-		else if (price == 0) {
-			System.out.println("TOTAL SPEND: "+ ANSI_WHITE+ "R$"+String.format("%.2f", price)+ANSI_RESET);
+		else if (agenda.readSomaMonth() == 0) {
+			System.out.println("TOTAL SPEND: "+ ANSI_WHITE+ "R$"+String.format("%.2f", agenda.readSomaMonth())+ANSI_RESET);
 		}
 		else {
-			System.out.println("TOTAL SPEND: "+ ANSI_GREEN+ "R$"+String.format("%.2f", price)+ANSI_RESET);				
+			System.out.println("TOTAL SPEND: "+ ANSI_GREEN+ "R$"+String.format("%.2f", agenda.readSomaMonth())+ANSI_RESET);				
 		}
-		return price;
 	}
 }

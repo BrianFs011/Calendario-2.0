@@ -1,4 +1,4 @@
-package entities;
+package service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -6,8 +6,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import application.UI;
+import entities.Dates;
+import entities.Note;
 
 public class Agenda extends Dates{
 
@@ -15,6 +20,10 @@ public class Agenda extends Dates{
 	private double value;
 	private String save = "E:\\ws-eclipse\\Calendario 2.0\\save";
 	private String file = "\\note.txt";
+	private List<Note>list = new ArrayList<>();
+	
+	public Agenda() {
+	}
 	
 	public Agenda(Integer year, Integer month, Integer day) {
 		super(year, month, day);
@@ -75,31 +84,58 @@ public class Agenda extends Dates{
 		}
 	}
 	
-	public double totalMonth(int year, int month, int day) {
+	public void readSomaDay() {
 		
 		File testPath = new File(pathFile());
 		
-		double som   = 0;
-		
 		if (testPath.exists() && !testPath.isDirectory()) {
-			try(BufferedReader br = new BufferedReader(new FileReader(pathFile()))){
+			System.out.println();
+			System.out.println("DAY SPEND :");
+			
+			try(BufferedReader br = new BufferedReader(new FileReader(testPath))){
 				String line = br.readLine();
 				while (line != null) {
+					
 					String[] vect = line.split(",");	
-					
-					som += Double.parseDouble(vect[1]);	
-					
+					list.add(new Note(vect[0], Double.parseDouble(vect[1])));					
 					line = br.readLine();
 
 				}
+				Collections.sort(list);
 			}
 			catch(IOException e) {
 				System.out.println("!Fogo no parquinho leitura Agenda!");
 				e.printStackTrace();
+			}	
+		}
+		else {
+			System.out.println(UI.ANSI_YELLOW+"!NOTHING FOUND!"+UI.ANSI_RESET);
+		}
+	}
+	
+	public double readSomaMonth() {
+				
+		File   testPathFolder = new File(pathYearMonth());
+		File[] folders = testPathFolder.listFiles(File::isDirectory);
+		
+		double total = 0;
+		if (testPathFolder.exists()) {
+			for(File folder : folders) {
+				try (BufferedReader br = new BufferedReader(new FileReader(folder+ file))) {
+					String line = br.readLine();
+					while (line != null) {
+						String[] vect = line.split(",");
+						total += Double.parseDouble(vect[1]);
+						line = br.readLine();
+					}
+				}
+				catch(IOException e) {
+					System.out.println("!Fogo no parquinho leitura Agenda!");
+					e.printStackTrace();
+				}
 			}
 		}
-		return som;
-	
+		return total;
 	}
 	
 	public String getNote() {
@@ -116,5 +152,9 @@ public class Agenda extends Dates{
 
 	public String getFile() {
 		return file;
+	}
+
+	public List<Note> getList() {
+		return list;
 	}	
 }
